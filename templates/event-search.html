@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>event-search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container-fluid bg-primary text-white text-center mb-5">
+        <div class="row py-3">
+            <div class="col"></div>
+            <div class="col-sm-8">
+                <h1 class="display-1 pt-5">Ticketmaster</h1>
+                <h1 class="fw-bold pb-5">Quickly find tickets around you</h1>
+                <div class="input-group mb-3 px-5">
+                    <input type="text" class="form-control" placeholder="Search by artist, genre, or event" aria-label="Username" name="classification_name">
+                    <input type="text" class="form-control" placeholder="Enter a city" aria-label="Server" name="city">
+                    <button type="button" class="btn btn-danger" id="search">Search</button>
+                </div>
+                <div class="alert alert-warning " role="alert" id="alert">
+
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row ">
+            <div class="col"></div>
+            <div class="col-md-8 p-1 py-3 " id="box">
+                <div class="container justify-content-md-center">
+                    <div class="text-secondary" id="results">
+                    </div>
+                </div>
+
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
+</html>
