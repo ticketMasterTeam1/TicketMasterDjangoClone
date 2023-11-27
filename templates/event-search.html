@@ -32,6 +32,9 @@
             <div class="col-md-8 p-1 py-3 " id="box">
                 <div class="container justify-content-md-center">
                     <div class="text-secondary" id="results">
+                        {% for card in cards %}
+                            {{ card }}
+                        {% endfor %}
                     </div>
                 </div>
 
