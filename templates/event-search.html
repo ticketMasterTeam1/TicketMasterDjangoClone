@@ -8,9 +8,13 @@
                 <h1 class="display-1 pt-5">Ticketmaster</h1>
                 <h1 class="fw-bold pb-5">Quickly find tickets around you</h1>
                 <div class="input-group mb-3 px-5">
-                    <input type="text" class="form-control" placeholder="Search by artist, genre, or event" aria-label="Username" name="classification_name">
-                    <input type="text" class="form-control" placeholder="Enter a city" aria-label="Server" name="city">
-                    <button type="button" class="btn btn-danger" id="search">Search</button>
+                    <form action="{% url 'event_search' %}" method="get">
+                        <input type="text" class="form-control" placeholder="Search by artist, genre, or event" aria-label="Username" name="classification_name">
+                        <input type="text" class="form-control" placeholder="Enter a city" aria-label="Server" name="city">
+                        <input type="submit" value="Add">
+                    </form>
+
+                    <a class="btn btn-danger" href="{% url 'event_search' %}" role="button">Search</a>
                 </div>
                 <div class="alert alert-warning " role="alert" id="alert">
 

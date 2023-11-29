@@ -6,14 +6,18 @@ import requests
 
 # Create your views here.
 
-# card info holds data to be displayed on each card
+# card info holds data to be displayed on each card - 2D array for each event with all info
 card_info = []
 
 
 # Gets events through JSON request then renders card
 def event_search(request):
+    if (request.method == 'GET'):
+        city = request.GET.get('city')
+        classification_name = request.GET.get('classification_name')
+        print(city)
+        print(classification_name)
     get_events("hartford", "music")
-    print(card_info)
     return render(request, 'event-search.html', context={'cards': card_info})
 
 
@@ -49,8 +53,6 @@ def event_search_format(data):
         venue_address = venue_path["address"]["line1"]
         venue_name = venue_path["name"]
 
-        print(venue_city)
-
         best_image = item["images"][0]
         for image in item["images"]:
             this_image = image
@@ -60,13 +62,10 @@ def event_search_format(data):
 
         # need to format into date and time
         dateloc = item["dates"]["start"]
-        print(dateloc)
         try:
             date_time = dateloc['dateTime']
         except:
             date_time = "no date or time set"
-
-        print(date_time)
 
         venue_ticket_link = item["url"]
 
