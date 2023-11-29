@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from datetime import datetime
 import requests
 
@@ -12,13 +12,27 @@ card_info = []
 
 # Gets events through JSON request then renders card
 def event_search(request):
-    if (request.method == 'GET'):
-        city = request.GET.get('city')
-        classification_name = request.GET.get('classification_name')
+    if request.method == 'POST':
+        #get search terms
+        city = request.POST['city']
+        classification_name = request.POST['classification_name']
         print(city)
         print(classification_name)
-    get_events("hartford", "music")
+
+        if not city or not classification_name:
+            print("redirected: not city or not classification name")
+            return redirect('event_search')
+
+        get_events(city, classification_name)
+        print(card_info)
+        if card_info is None:
+            return redirect('event_search')
+        else:
+            print(card_info)
+
+
     return render(request, 'event-search.html', context={'cards': card_info})
+
 
 
 # JSON request -> event_search_format
