@@ -47,6 +47,7 @@ def event_search_format(data):
         venue_city = venue_path["city"]["name"]
         venue_state = venue_path["state"]["name"]
         venue_address = venue_path["address"]["line1"]
+        venue_name = venue_path["name"]
 
         print(venue_city)
 
@@ -58,9 +59,16 @@ def event_search_format(data):
         image = best_image["url"]
 
         # need to format into date and time
-        # dateTime = item["dates"]["start"]["dateTime"]
+        dateloc = item["dates"]["start"]
+        print(dateloc)
+        try:
+            date_time = dateloc['dateTime']
+        except:
+            date_time = "no date or time set"
+
+        print(date_time)
 
         venue_ticket_link = item["url"]
 
-        event_data = [name, image, venue_ticket_link]
+        event_data = [name, image, venue_ticket_link, venue_city, venue_state, venue_address, date_time, venue_name]
         card_info.append(event_data)
