@@ -20,5 +20,6 @@ from eventSearch import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.event_search)
+    path('', views.event_search),
+
 ]

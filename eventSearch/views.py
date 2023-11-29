@@ -37,12 +37,11 @@ def event_search_format(data):
     total_elements = data["page"]["totalElements"]
     total_results = data["page"]["size"]
     eventsPath = data["_embedded"]["events"]
-
     for item in eventsPath:
         name = item["name"]
 
         best_image = item["images"][0]
-
+        print(best_image)
         for image in item["images"]:
             this_image = image
             if (this_image["width"] > best_image["width"]):
@@ -50,13 +49,13 @@ def event_search_format(data):
         image = best_image["url"]
 
         #need to format into date and time
-        dateTime = item["dates"]["start"]["dateTime"]
+        #dateTime = item["dates"]["start"]["dateTime"]
 
-        venue_path = item["_embedded"]["venues"]
-        venue_city = venue_path["city"]["name"]
-        venue_state = venue_path["state"]["name"]
-        venue_address_l1 = venue_path["address"]["line1"]
+        #venue_path = item["_embedded"]["venues"]
+        #venue_city = item["_embedded"]["venues"]["city"]["name"]
+        #venue_state = item["_embedded"]["venues"]["state"]["name"]
+        #venue_address_l1 = item["_embedded"]["venues"]["address"]["line1"]
         venue_ticket_link = item["url"]
 
-
-
+        event_data = [name,image,venue_ticket_link]
+        card_info.append(event_data)
