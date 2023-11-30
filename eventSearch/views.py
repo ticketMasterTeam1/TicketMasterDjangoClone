@@ -2,18 +2,13 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 import requests
 
-# my javascript json response -> response = requests.get("https://app.ticketmaster.com/discovery/v2/events.json?size=20&apikey=Ij0EiPF3QAJv6NvdHh92ALlIHgMK8a7U&city=${city}&keyword=${classificationName}&sort=date,asc")
-
-# Create your views here.
-
 # card info holds data to be displayed on each card - 2D array for each event with all info
 card_info = []
-
 
 # Gets events through JSON request then renders card
 def event_search(request):
     if request.method == 'POST':
-        #get search terms
+        # get search terms
         city = request.POST['city']
         classification_name = request.POST['classification_name']
         print(city)
@@ -29,10 +24,7 @@ def event_search(request):
             return redirect('event_search')
         else:
             print(card_info)
-
-
     return render(request, 'event-search.html', context={'cards': card_info})
-
 
 
 # JSON request -> event_search_format
@@ -85,3 +77,8 @@ def event_search_format(data):
 
         event_data = [name, image, venue_ticket_link, venue_city, venue_state, venue_address, date_time, venue_name]
         card_info.append(event_data)
+
+
+def band(request):
+
+    return render(request, 'band.html')
