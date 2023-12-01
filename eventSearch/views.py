@@ -51,6 +51,7 @@ def event_search_format(data):
     total_elements = data["page"]["totalElements"]
     total_results = data["page"]["size"]
     eventsPath = data["_embedded"]["events"]
+    count = 0
     for item in eventsPath:
         name = item["name"]
         venue_path = item["_embedded"]["venues"][0]
@@ -74,11 +75,14 @@ def event_search_format(data):
             date_time = "no date or time set"
 
         venue_ticket_link = item["url"]
-
-        event_data = [name, image, venue_ticket_link, venue_city, venue_state, venue_address, date_time, venue_name]
+        id = count
+        count += 1
+        event_data = [name, image, venue_ticket_link, venue_city, venue_state, venue_address, date_time, venue_name, id]
         card_info.append(event_data)
 
 
-def band(request):
-
+def band(request,band_id):
+    band_name = card_info[band_id][0]
+    print(band_name)
+    
     return render(request, 'band.html')
