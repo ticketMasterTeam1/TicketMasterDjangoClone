@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
 import requests
+from .forms import SubmitReview
+from .models import Band
 
 # card info holds data to be displayed on each card - 2D array for each event with all info
 card_info = []
@@ -84,5 +86,19 @@ def event_search_format(data):
 def band(request,band_id):
     band_name = card_info[band_id][0]
     print(band_name)
-    
-    return render(request, 'band.html')
+
+    this_band = Band.objects.filter(name = band_name)
+    print(this_band)
+    if len(this_band) == 0:
+        add_band = Band(name=band_name)
+        add_band.save()
+
+    form = SubmitReview(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+
+
+
+
+    return render(request, 'band.html', context={'name': band_name})
