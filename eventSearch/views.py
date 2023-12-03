@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 import requests
 from .forms import SubmitReview
-from .models import Band
+from .models import Band, Reviews
 
 # card info holds data to be displayed on each card - 2D array for each event with all info
 card_info = []
+
 
 # Gets events through JSON request then renders card
 def event_search(request):
@@ -83,11 +84,11 @@ def event_search_format(data):
         card_info.append(event_data)
 
 
-def band(request,band_id):
+def band(request, band_id):
     band_name = card_info[band_id][0]
     print(band_name)
 
-    this_band = Band.objects.filter(name = band_name)
+    this_band = Band.objects.filter(name=band_name)
     print(this_band)
     if len(this_band) == 0:
         add_band = Band(name=band_name)
@@ -98,7 +99,13 @@ def band(request,band_id):
         if form.is_valid():
             form.save()
 
+    review_query_set = Reviews.objects.filter(band__name=band_name)
+    context = {
+        'name': band_name,
+        'form': form,
+        'reviews': review_query_set
+    }
 
+    print(context)
 
-
-    return render(request, 'band.html', context={'name': band_name})
+    return render(request, 'band.html', context)
