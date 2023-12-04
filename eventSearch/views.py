@@ -95,9 +95,13 @@ def band(request, band_id):
         add_band.save()
 
     form = SubmitReview(request.POST or None)
+
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            form_review = form.cleaned_data["review"]
+            form_rating = form.cleaned_data["rating"]
+            this_review = Reviews(band=this_band[0], review=form_review, rating=form_rating)
+            this_review.save()
 
     review_query_set = Reviews.objects.filter(band__name=band_name)
     context = {

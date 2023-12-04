@@ -6,8 +6,9 @@ from .models import Reviews
 class SubmitReview(forms.ModelForm):
     class Meta:
         model = Reviews
-        fields = '__all__'
+        fields = ['review', 'rating']
 
         widgets = {
-            'review': forms.TextInput(attrs={'class': 'form-control'})
+            'review': forms.TextInput(attrs={'class': 'form-control'}),
+            'band': forms.TextInput(attrs={'class': 'hidden'})
         }
