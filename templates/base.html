@@ -23,7 +23,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'event_search' %}">Home</a>
           </li>
           <!--
           <li class="nav-item">
@@ -47,11 +47,31 @@
           </li>
           -->
         </ul>
-        <a href="/account">
-          <button class="btn btn-light " type="button">
-            <i class="fa fa-user" aria-hidden="true"></i>
-          </button>
-        </a>
+        <div class="g-2 ">
+          {% if user.is_authenticated %}
+          <a href="{% url 'account' %}">
+            <button class="btn btn-light " type="button">
+              <i class="fa fa-user" aria-hidden="true"></i>
+            </button>
+          </a>
+          <a href="{% url 'logout' %}">
+            <button class="btn btn-danger  " type="button">
+              Logout
+            </button>
+          </a>
+          {% else %}
+          <a href="{% url 'login' %}">
+            <button class="btn btn-success   " type="button">
+              Login
+            </button>
+          </a>
+          <a href="{% url 'register' %}">
+            <button class="btn btn-secondary   " type="button">
+              Signup
+            </button>
+          </a>
+          {% endif %}
+        </div>
       </div>
     </div>
   </nav>

@@ -1,4 +1,7 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from datetime import datetime
 import requests
 from .forms import SubmitReview
@@ -113,3 +116,34 @@ def band(request, band_id):
     print(context)
 
     return render(request, 'band.html', context)
+
+@login_required(login_url='/account/login/')
+def account(request):
+    return render(request, 'account/index.html')
+
+def register_view(request):
+    form = UserCreationForm(request.POST or None)
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('event_search') 
+    return render(request, 'account/register.html', {'form': form})
+    
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST) 
+        if form.is_valid():
+        # get the user info from the form data and log in the user
+            user = form.get_user() 
+            login(request, user) 
+            return redirect('event_search')
+    else:
+        form = AuthenticationForm()
+        return render(request, 'account/login.html', {'form': form})
+                  
+
+def logout_view(request):
+    logout(request)
+    return redirect('event_search')
