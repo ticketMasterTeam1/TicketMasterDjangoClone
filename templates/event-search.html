@@ -45,14 +45,14 @@
                             <h3 class="card-title mw-50 text-wrap ">{{ card.name }}</h3>
                             <div class="h3 w-100 gap-2 col" style="font-size: 22px">
                                 {% for platform, link in card.social_media_links.items %}
-                                <a href="{{ card.venue_ticket_link }}" target="_blank"><i class="{{ link.icon }}"></i></a>
+                                <a href="{{ link.url }}" target="_blank"><i class="{{ link.icon }}"></i></a>
                                 {% endfor %}
                             </div>
                         </div>
                         <h4 class="card-text text-secondary">{{ card.venue_name }}</h4>
                         <p class="card-text text-secondary">{{ card.venue_address }}, {{ card.venue_city }},
                             {{ card.venue_state }}<br></p>
-                        <a href="{{ venue_ticket_link }}" class="btn btn-primary" target="_blank">Find Tickets</a>
+                        <a href="{{ card.venue_ticket_link }}" class="btn btn-primary" target="_blank">Find Tickets</a>
                     </div>
                 </div>
                 <div class="col-md-3 col-6 d-flex flex-column justify-content-between text-end">
