@@ -140,7 +140,7 @@ def event_search_format(data):
         }
         card_info.append(event_data)
 
-
+@login_required(login_url='/account/login/')
 def band(request, band_id):
     band_name = card_info[band_id]["name"]
 
@@ -155,7 +155,8 @@ def band(request, band_id):
         if form.is_valid():
             form_review = form.cleaned_data["review"]
             form_rating = form.cleaned_data["rating"]
-            this_review = Reviews(band=this_band[0], review=form_review, rating=form_rating)
+            author = request.user
+            this_review = Reviews(band=this_band[0], review=form_review, rating=form_rating, author=author)
             this_review.save()
 
     review_query_set = Reviews.objects.filter(band__name=band_name)
