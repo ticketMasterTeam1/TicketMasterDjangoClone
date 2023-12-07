@@ -140,7 +140,7 @@ def event_search_format(data):
         }
         card_info.append(event_data)
 
-@login_required(login_url='/account/login/')
+@login_required(login_url='/login/')
 def band(request, band_id):
     band_name = card_info[band_id]["name"]
 
@@ -200,6 +200,6 @@ def logout_view(request):
     return redirect('event_search')
 
 #Restricted Access Account Page
-@login_required(login_url='/account/login/')
+@login_required(login_url='/login/')
 def account(request):
     return render(request, 'account/index.html')
