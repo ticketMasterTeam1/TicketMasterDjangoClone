@@ -10,5 +10,6 @@ class SubmitReview(forms.ModelForm):
 
         widgets = {
             'review': forms.TextInput(attrs={'class': 'form-control'}),
-            'band': forms.TextInput(attrs={'class': 'hidden'})
+            'band': forms.TextInput(attrs={'class': 'hidden'}),
+            'rating': forms.Select(attrs={'class': 'form-control'})
         }

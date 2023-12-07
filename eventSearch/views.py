@@ -13,6 +13,7 @@ card_info = []
 
 # Gets events through JSON request then renders card
 def event_search(request):
+    card_info.clear()
     if request.method == 'POST':
         # get search terms
         city = request.POST['city']
@@ -44,7 +45,6 @@ def get_events(city, classification_name):
         # Raise exception for 4xx and 5xx status code
         response.raise_for_status()
         data = response.json()
-        # print(data)
         event_search_format(data)
         return data
     except requests.exceptions.RequestException as e:
