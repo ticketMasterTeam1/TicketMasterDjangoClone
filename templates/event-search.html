@@ -30,43 +30,72 @@
         <div class="col"></div>
     </div>
 </div>
+<div class="container mt-5">
+    <div id="results" class=" flex-column align-items-stretch card rounded-0 p-4 shadow-lg mb-4 {% if not cards %}d-none{% endif %}">
 
-<div class="container">
-    <div class="row ">
-        <div class="col"></div>
-        <div class="col-md-8 p-1 py-3 " id="box">
-            <div class="container justify-content-md-center">
-                <div class="text-secondary" id="results">
-                    {% for card in cards %}
-                    <div class="card mb-4 shadow-lg">
-                        <div class="row g-0">
-                            <div class="col-md-5 py-5 p-1">
-                                <img src="{{ card.1 }}" class="img-fluid rounded-start" alt="event image">
-                            </div>
-                            <div class="col-6 col-md-4">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold mt-4">{{ card.0 }}</h5>
-                                    <a href="{% url 'band' card.8 %}">{{ card.0 }}</a>
-                                    <h5 class="card-title ">{{ card.7 }}</h5>
-                                    <p class="card-text">{{ card.5 }}<br> {{ card.3 }}, {{ card.4 }} </p>
-                                    <a class="btn btn-primary align-items-end" href="{{ card.2 }}" role="button">Find
-                                        Tickets</a>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3 text-end text-success ">
-                                <div class="card-body">
-                                    <h5 class="card-title"></h5>
-                                    <h5 class="card-title"></h5>
-                                </div>
+        {% for card in cards %}
+        <div class="card mb-3 shadow-sm">
+            <div class="row my-auto">
+                <div class="col-md-3 d-flex align-items-center">
+                    <img src="{{ card.image_url }}" class="card-img" alt="Event">
+                </div>
+                <div class="col-md-6 d-flex col-6">
+                    <div class="card-body">
+                        <div class="d-flex flex-md-row flex-column align-items-center mb-2 gap-2">
+                            <h3 class="card-title w-50 text-wrap ">{{ card.name }}</h3>
+                            <div class="h3 w-100 gap-2 col" style="font-size: 22px">
+                                {% for platform, link in card.social_media_links.items %}
+                                <a href="{{ link.url }}" target="_blank"><i class="{{ link.icon }}"></i></a>
+                                {% endfor %}
                             </div>
                         </div>
+                        <h4 class="card-text text-secondary">{{ card.venue_name }}</h4>
+                        <p class="card-text text-secondary">{{ card.venue_address }}, {{ card.venue_city }},
+                            {{ card.venue_state }}<br></p>
+                        <a href="#" class="btn btn-primary" target="_blank">Find Tickets</a>
                     </div>
-                    {% endfor %}
+                </div>
+                <div class="col-md-3 col-6 d-flex flex-column justify-content-between text-end">
+                    <div class="p-1">
+                        <h3 class="text-muted">{{ card.date }}</h3>
+                        <h5 class="text-muted">{{ card.time }}</h5>
+                    </div>
+                    <div class="">
+                        <h3 class="bg-primary text-light text-end d-inline rounded-1">{{ card.lowest_price }}</h3>
+                    </div>
                 </div>
             </div>
-
         </div>
-        <div class="col"></div>
+        {% comment %}
+        Old Card
+
+        <div class="card mb-4 shadow-lg">
+            <div class="row g-0">
+                <div class="col-md-5 py-5 p-1">
+                    <img src="{{ card.1 }}" class="img-fluid rounded-start" alt="event image">
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mt-4">{{ card.0 }}</h5>
+                        <a href="{% url 'band' card.8 %}">{{ card.0 }}</a>
+                        <h5 class="card-title ">{{ card.7 }}</h5>
+                        <p class="card-text">{{ card.5 }}<br> {{ card.3 }}, {{ card.4 }} </p>
+                        <a class="btn btn-primary align-items-end" href="{{ card.2 }}" role="button">Find
+                            Tickets</a>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 text-end text-success ">
+                    <div class="card-body">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-title"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endcomment %}
+        {% endfor %}
     </div>
 </div>
+
 {% endblock %}

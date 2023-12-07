@@ -54,6 +54,33 @@ def get_events(city, classification_name):
 
 # using JSON data create data for cards
 def event_search_format(data):
+    # Function to get social media links with Font Awesome icons
+    def get_social_media_links(event):
+        icon_map = {
+            'youtube': 'fa-brands fa-youtube',
+            'twitter': 'fa-brands fa-twitter',
+            'facebook': 'fa-brands fa-facebook',
+            'instagram': 'fa-brands fa-instagram',
+            'spotify': 'fa-brands fa-spotify',
+            'homepage': 'fa-solid fa-house',
+            'musicbrainz': 'fa-solid fa-music',
+            'wiki': 'fa-brands fa-wikipedia-w',
+            'itunes': 'fa-brands fa-apple',
+            'lastfm': 'fa-solid fa-tower-broadcast',
+        }
+        social_media_links = {}
+        if event.get('_embedded') and event['_embedded'].get('attractions') and event['_embedded']['attractions']:
+            first_attraction = event['_embedded']['attractions'][0]
+            if first_attraction.get('externalLinks'):
+                for key, value in first_attraction['externalLinks'].items():
+                    if value and value[0].get('url'):
+                        social_media_links[key] = {
+                            "url": value[0]['url'],
+                            "icon": icon_map.get(key, 'fa-question-circle')  # Default icon
+                        }
+        return social_media_links
+    
+
     total_elements = data["page"]["totalElements"]
     total_results = data["page"]["size"]
     eventsPath = data["_embedded"]["events"]
@@ -76,14 +103,37 @@ def event_search_format(data):
         # need to format into date and time
         dateloc = item["dates"]["start"]
         try:
-            date_time = dateloc['dateTime']
-        except:
-            date_time = "no date or time set"
+            # Parse the dateTime string into a datetime object
+            date_time_obj = datetime.fromisoformat(dateloc['dateTime'])
+
+            # Format the date and time
+            formatted_date = date_time_obj.strftime("%a %b %d %Y")
+            formatted_time = date_time_obj.strftime("%I:%M %p")
+        except KeyError:
+            formatted_date = "No date set"
+            formatted_time = ""
+
 
         venue_ticket_link = item["url"]
+        lowest_price = f"${item['priceRanges'][0]['min']}+" if 'priceRanges' in item and item['priceRanges'] else ''
+
         id = count
         count += 1
-        event_data = [name, image, venue_ticket_link, venue_city, venue_state, venue_address, date_time, venue_name, id]
+        # Named Card Data
+        event_data = {
+            "name": name,
+            "image_url": image,
+            "venue_ticket_link": venue_ticket_link,
+            "venue_city": venue_city,
+            "venue_state": venue_state,
+            "venue_address": venue_address,
+            "date": formatted_date,
+            "time": formatted_time,
+            "venue_name": venue_name,
+            "social_media_links": get_social_media_links(item),
+            "lowest_price": lowest_price,
+            "id": id
+        }
         card_info.append(event_data)
 
 
@@ -117,10 +167,10 @@ def band(request, band_id):
 
     return render(request, 'band.html', context)
 
-@login_required(login_url='/account/login/')
-def account(request):
-    return render(request, 'account/index.html')
 
+#Account Registration
+
+#Register -> Instantly Login
 def register_view(request):
     form = UserCreationForm(request.POST or None)
     if request.method == 'POST':
@@ -130,7 +180,8 @@ def register_view(request):
             login(request, user)
             return redirect('event_search') 
     return render(request, 'account/register.html', {'form': form})
-    
+
+#Login Fn    
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST) 
@@ -143,7 +194,12 @@ def login_view(request):
         form = AuthenticationForm()
         return render(request, 'account/login.html', {'form': form})
                   
-
+#Logout
 def logout_view(request):
     logout(request)
     return redirect('event_search')
+
+#Restricted Access Account Page
+@login_required(login_url='/account/login/')
+def account(request):
+    return render(request, 'account/index.html')
