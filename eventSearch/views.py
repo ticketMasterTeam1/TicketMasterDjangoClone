@@ -102,6 +102,7 @@ def event_search_format(data):
 
         # need to format into date and time
         dateloc = item["dates"]["start"]
+        print(dateloc)
         try:
             # Parse the dateTime string into a datetime object
             date_time_obj = datetime.fromisoformat(dateloc['dateTime'])
@@ -111,6 +112,9 @@ def event_search_format(data):
             formatted_time = date_time_obj.strftime("%I:%M %p")
         except KeyError:
             formatted_date = "No date set"
+            formatted_time = ""
+        except ValueError:
+            formatted_date = "Value error requires resolution"
             formatted_time = ""
 
 
@@ -138,11 +142,9 @@ def event_search_format(data):
 
 
 def band(request, band_id):
-    band_name = card_info[band_id][0]
-    print(band_name)
+    band_name = card_info[band_id]["name"]
 
     this_band = Band.objects.filter(name=band_name)
-    print(this_band)
     if len(this_band) == 0:
         add_band = Band(name=band_name)
         add_band.save()
@@ -162,9 +164,6 @@ def band(request, band_id):
         'form': form,
         'reviews': review_query_set
     }
-
-    print(context)
-
     return render(request, 'band.html', context)
 
 
