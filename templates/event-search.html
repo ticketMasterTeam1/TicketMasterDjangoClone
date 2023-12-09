@@ -43,7 +43,6 @@
                     <div class="card-body">
                         <div class="d-flex flex-md-row flex-column align-items-center mb-2 gap-2">
                             <h3 class="card-title mw-50 text-wrap ">{{ card.name }}</h3>
-                            <a class="fs-4 card-title mw-50 text-wrap" href="{% url 'band' card.id %}">{{ card.name }}</a>
                             <div class="h3 w-100 gap-2 col" style="font-size: 22px">
                                 {% for platform, link in card.social_media_links.items %}
                                 <a href="{{ link.url }}" target="_blank"><i class="{{ link.icon }}"></i></a>
@@ -54,6 +53,7 @@
                         <p class="card-text text-secondary">{{ card.venue_address }}, {{ card.venue_city }},
                             {{ card.venue_state }}<br></p>
                         <a href="{{ card.venue_ticket_link }}" class="btn btn-primary" target="_blank">Find Tickets</a>
+                        <a href="{% url 'band' card.id %}" class="btn btn-secondary ms-2">See Reviews</a>
                     </div>
                 </div>
                 <div class="col-md-3 col-6 d-flex flex-column justify-content-between text-end">

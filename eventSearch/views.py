@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -140,33 +141,61 @@ def event_search_format(data):
         }
         card_info.append(event_data)
 
-@login_required(login_url='/login/')
 def band(request, band_id):
     band_name = card_info[band_id]["name"]
-
-    this_band = Band.objects.filter(name=band_name)
-    if len(this_band) == 0:
-        add_band = Band(name=band_name)
-        add_band.save()
+    band_img_url = card_info[band_id]["image_url"]
+    this_band, created = Band.objects.get_or_create(name=band_name, image_url=band_img_url)
 
     form = SubmitReview(request.POST or None)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            form_review = form.cleaned_data["review"]
-            form_rating = form.cleaned_data["rating"]
-            author = request.user
-            this_review = Reviews(band=this_band[0], review=form_review, rating=form_rating, author=author)
-            this_review.save()
+    star_range = range(1, 6)
 
-    review_query_set = Reviews.objects.filter(band__name=band_name)
+    if request.method == 'POST':
+        # Check if the request is an AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            action = request.POST.get('action')
+            review_id = request.POST.get('review_id')
+            review = get_object_or_404(Reviews, id=review_id)
+
+            if request.user != review.author:
+                return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+            if action == 'delete':
+                review.delete()
+                return JsonResponse({'status': 'success'})
+            elif action == 'edit':
+                edit_form = SubmitReview(request.POST, instance=review)
+                if edit_form.is_valid():
+                    edited_review = edit_form.save(commit=False)
+                    edited_review.rating = request.POST.get('rating')  # Update the rating
+                    edited_review.save()
+                    return JsonResponse({'status': 'success', 'new_text': edited_review.review, 'new_rating': edited_review.rating})
+                else:
+                    return JsonResponse({'status': 'error', 'errors': edit_form.errors}, status=400)
+        else:
+            if form.is_valid():
+                new_review = form.save(commit=False)
+                new_review.author = request.user
+                new_review.band = this_band
+                new_review.save()
+                return redirect('band', band_id=band_id)
+
+    review_query_set = Reviews.objects.filter(band=this_band).order_by('-created_on')
+    reviews = [{
+        'id': review.id,
+        'review': review.review,
+        'rating': review.rating,
+        'author': review.author.username,
+        'is_author': review.author == request.user
+    } for review in review_query_set]
+
     context = {
         'name': band_name,
         'form': form,
-        'reviews': review_query_set
+        'reviews': reviews,
+        'star_range': star_range
     }
     return render(request, 'band.html', context)
-
 
 #Account Registration
 
@@ -202,4 +231,5 @@ def logout_view(request):
 #Restricted Access Account Page
 @login_required(login_url='/login/')
 def account(request):
-    return render(request, 'account/index.html')
+    user_reviews = Reviews.objects.filter(author=request.user)
+    return render(request, 'account/index.html', {'user_reviews': user_reviews})

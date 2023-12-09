@@ -1,25 +1,96 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block body %}
+  <div class="container mt-3">
+    <img src="{{ band.image_url }}" alt="Image of {{ band.name }}" />
     <h1>{{ name }}</h1>
-
-    <div class="row">
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form.as_div }}
-            <button type="submit" class="btn btn-primary">Submit</button>
+    {% if user.is_authenticated %}
+      <div class="row mb-3">
+        <form action="" method="post" class="form">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-    </div>
-
-    <div>
-        {% for review in reviews %}
-            <div>
-            <h3>Review - Rated {{ review.rating }}</h3>
-            <p>{{ review.review }}</p>
-            <p>{{ review.author }}</p>
-            </div>
-        {% endfor %}
-    </div>
-
-
+      </div>
+    {% endif %}
+  </div>
+  <div class="container">
+    {% for review in reviews %}
+      {% with page_context='band_page' %}
+        {% include 'review_card.html' %}
+      {% endwith %}
+    {% endfor %}
+  </div>
+  <script>
+    // Delete your own review
+    function deleteReview(reviewId) {
+      $.ajax({
+        url: '{{ request.get_full_path }}',
+        type: 'POST',
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: 'delete',
+          review_id: reviewId
+        },
+        success: function (response) {
+          if (response.status === 'success') {
+            // Remove the entire review card element from the page
+            $('#review_container_' + reviewId).remove()
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('Error in AJAX request: ', status, error)
+          console.error('Response Text: ', xhr.responseText)
+        }
+      })
+    }
+    
+    //Switches text field to input by showing & hiding elements
+    function showEditField(reviewId) {
+      $('#review_display_' + reviewId).hide()
+      $('#review_edit_' + reviewId).show()
+    }
+    
+    //Cancel Edits
+    function cancelEdit(reviewId) {
+      $('#review_edit_' + reviewId).hide()
+      $('#review_display_' + reviewId).show()
+    }
+    
+    function submitEdit(reviewId) {
+      var newText = $('#edit_text_' + reviewId).val()
+      var newRating = $('#edit_rating_' + reviewId).val()
+      $.ajax({
+        url: '{{ request.get_full_path }}',
+        type: 'POST',
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: 'edit',
+          review_id: reviewId,
+          review: newText,
+          rating: newRating
+        },
+        success: function (response) {
+          if (response.status === 'success') {
+            // Update the review text on the page
+            $('#review_display_' + reviewId + ' .card-text').text(newText)
+    
+            // Update the star rating display
+            var ratingHtml = ''
+            for (var i = 1; i <= 5; i++) {
+              ratingHtml += i <= response.new_rating ? '<i class="fas fa-star" style="color: #ffe234;"></i>' : '<i class="far fa-star" style="color: #ffe234;"></i>'
+            }
+            $('#display_rating_' + reviewId).html(ratingHtml)
+    
+            cancelEdit(reviewId)
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('Error in AJAX request: ', status, error)
+          console.error('Response Text: ', xhr.responseText)
+        }
+      })
+    }
+  </script>
 {% endblock %}
