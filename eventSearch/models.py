@@ -14,7 +14,7 @@ class Profile(models.Model):
 class Reviews(models.Model):
     band = models.ForeignKey(Band, on_delete=models.CASCADE)
     review = models.TextField()
-    rating = models.PositiveIntegerField(choices=[(1, '*'), (2, '**'), (3, '***'), (4, '****'), (5, '*****')])
+    rating = models.PositiveIntegerField(choices=[(1, '1 Star'), (2, '2 Stars'), (3, '3 Stars'), (4, '4 Stars'), (5, '5 Stars')])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     edited_on = models.DateTimeField(auto_now_add=True)

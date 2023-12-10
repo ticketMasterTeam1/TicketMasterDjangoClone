@@ -18,8 +18,10 @@
     <!-- Conditional buttons based on the page context -->
     <div style="position: absolute; top: 10px; right: 10px;">
       {% if page_context == 'band_page' %}
-        <button class="btn btn-link text-secondary" onclick="showEditField({{ review.id }})" style="font-size: 1.2rem;"><i class="fas fa-edit"></i></button>
-        <button class="btn btn-link text-danger" onclick="deleteReview({{ review.id }})" style="font-size: 1.2rem;"><i class="fas fa-trash-alt"></i></button>
+          {% if review.author == request.user.username %}
+              <button class="btn btn-link text-secondary" onclick="showEditField({{ review.id }})" style="font-size: 1.2rem;"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-link text-danger" onclick="deleteReview({{ review.id }})" style="font-size: 1.2rem;"><i class="fas fa-trash-alt"></i></button>
+          {% endif %}
       {% elif page_context == 'account_page' %}
         <a href="{% url 'band' review.band.id %}" class="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-right"></i></a>
       {% endif %}
