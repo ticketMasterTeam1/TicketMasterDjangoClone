@@ -141,10 +141,16 @@ def event_search_format(data):
         }
         card_info.append(event_data)
 
-def band(request, band_id):
-    band_name = card_info[band_id]["name"]
-    band_img_url = card_info[band_id]["image_url"]
-    this_band, created = Band.objects.get_or_create(name=band_name, image_url=band_img_url)
+def band(request, band_id, from_account):
+    if from_account == 0:
+        band_name = card_info[band_id]["name"]
+        band_img_url = card_info[band_id]["image_url"]
+        this_band, created = Band.objects.get_or_create(name=band_name, image_url=band_img_url)
+    else:
+        this_band = Band.objects.get(id=band_id)
+        band_name = this_band.name
+        band_img_url = this_band.image_url
+
 
     form = SubmitReview(request.POST or None)
 

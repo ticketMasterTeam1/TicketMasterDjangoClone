@@ -21,7 +21,7 @@ from eventSearch import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.event_search, name="event_search"),
-    path('band/<int:band_id>/', views.band, name="band"),
+    path('band/<int:band_id>/<int:from_account>/', views.band, name="band"),
     path('account/', views.account, name="account"),
     path('login/', views.login_view, name="login"),
     path('register/', views.register_view, name="register"),
