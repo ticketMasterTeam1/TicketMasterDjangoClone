@@ -103,20 +103,18 @@ def event_search_format(data):
 
         # need to format into date and time
         dateloc = item["dates"]["start"]
-        print(dateloc)
-        try:
-            # Parse the dateTime string into a datetime object
-            date_time_obj = datetime.fromisoformat(dateloc['dateTime'])
 
-            # Format the date and time
-            formatted_date = date_time_obj.strftime("%a %b %d %Y")
-            formatted_time = date_time_obj.strftime("%I:%M %p")
+        try:
+            date_obj = datetime.strptime(dateloc['localDate'], "%Y-%m-%d")
+            formatted_date = date_obj.strftime("%a %b %d %Y")
         except KeyError:
-            formatted_date = "No date set"
-            formatted_time = ""
-        except ValueError:
-            formatted_date = "Value error requires resolution"
-            formatted_time = ""
+            formatted_date = "No Date Set"
+
+        try:
+            time_obj = datetime.strptime(dateloc['localTime'], "%H:%M:%S")
+            formatted_time = time_obj.strftime("%I:%M %p")
+        except KeyError:
+            formatted_time = "No Time Set"
 
 
         venue_ticket_link = item["url"]
