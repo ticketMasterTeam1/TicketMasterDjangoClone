@@ -182,7 +182,7 @@ def band(request, band_id, from_account):
                 new_review.author = request.user
                 new_review.band = this_band
                 new_review.save()
-                return redirect('band', band_id=band_id)
+                return redirect('band', band_id=band_id, from_account=1)
 
     review_query_set = Reviews.objects.filter(band=this_band).order_by('-created_on')
     reviews = [{
@@ -197,7 +197,8 @@ def band(request, band_id, from_account):
         'name': band_name,
         'form': form,
         'reviews': reviews,
-        'star_range': star_range
+        'star_range': star_range,
+        'image_url': band_img_url
     }
     return render(request, 'band.html', context)
 

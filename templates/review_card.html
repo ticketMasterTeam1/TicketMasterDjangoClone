@@ -23,6 +23,7 @@
               <button class="btn btn-link text-danger" onclick="deleteReview({{ review.id }})" style="font-size: 1.2rem;"><i class="fas fa-trash-alt"></i></button>
           {% endif %}
       {% elif page_context == 'account_page' %}
+          <span>{{ review.band.name  }}       </span>
         <a href="{% url 'band' review.band.id 1 %}" class="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-right"></i></a>
       {% endif %}
     </div>
