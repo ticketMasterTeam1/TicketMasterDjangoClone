@@ -80,11 +80,11 @@ def event_search_format(data):
                             "icon": icon_map.get(key, 'fa-question-circle')  # Default icon
                         }
         return social_media_links
-    
 
-    total_elements = data["page"]["totalElements"]
-    total_results = data["page"]["size"]
-    eventsPath = data["_embedded"]["events"]
+    try:
+        eventsPath = data["_embedded"]["events"]
+    except KeyError:
+        return
     count = 0
     for item in eventsPath:
         name = item["name"]
@@ -118,7 +118,10 @@ def event_search_format(data):
 
 
         venue_ticket_link = item["url"]
-        lowest_price = f"${item['priceRanges'][0]['min']}+" if 'priceRanges' in item and item['priceRanges'] else ''
+        try:
+            lowest_price = f"${item['priceRanges'][0]['min']}+" if 'priceRanges' in item and item['priceRanges'] else ''
+        except KeyError:
+            lowest_price = ""
 
         id = count
         count += 1
@@ -182,7 +185,7 @@ def band(request, band_id, from_account):
                 new_review.author = request.user
                 new_review.band = this_band
                 new_review.save()
-                return redirect('band', band_id=band_id, from_account=1)
+                return redirect('band', band_id=band_id, from_account=0)
 
     review_query_set = Reviews.objects.filter(band=this_band).order_by('-created_on')
     reviews = [{

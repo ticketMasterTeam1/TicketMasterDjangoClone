@@ -24,7 +24,7 @@
                 -->
             </div>
             <div class="alert alert-warning hiding d-none " role="alert" id="alert">
-
+                <h1>Enter a valid artist genre event and city</h1>
             </div>
         </div>
         <div class="col"></div>
@@ -67,34 +67,7 @@
                 </div>
             </div>
         </div>
-        {% comment %}
-        Old Card
 
-        <div class="card mb-4 shadow-lg">
-            <div class="row g-0">
-                <div class="col-md-5 py-5 p-1">
-                    <img src="{{ card.1 }}" class="img-fluid rounded-start" alt="event image">
-                </div>
-                <div class="col-6 col-md-4">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold mt-4">{{ card.0 }}</h5>
-                        <a href="{% url 'band' card.8 %}">{{ card.0 }}</a>
-                        <h5 class="card-title ">{{ card.7 }}</h5>
-                        <p class="card-text">{{ card.5 }}<br> {{ card.3 }}, {{ card.4 }} </p>
-                        <a class="btn btn-primary align-items-end" href="{{ card.2 }}" role="button">Find
-                            Tickets</a>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3 text-end text-success ">
-                    <div class="card-body">
-                        <h5 class="card-title"></h5>
-                        <h5 class="card-title"></h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {% endcomment %}
         {% endfor %}
     </div>
 </div>
