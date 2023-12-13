@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block body %}
-  <div class="container m-4">
+  <div class="container">
 
-    <h2>Hello, {{ request.user.username }}</h2>
+    <h2 class="mt-2">Hello, {{ request.user.username }}</h2>
       <br>
-    <h3>My Reviews</h3>
+    <h3 class="mt-2" >My Reviews:</h3>
     <div>
       {% for review in user_reviews %}
         {% with page_context='account_page' %}
